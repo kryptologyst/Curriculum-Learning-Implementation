@@ -1,0 +1,7 @@
+# @package trainer
+_target_: src.train.trainer.StandardTrainer
+
+optimizer: "adam"
+scheduler: "cosine"
+loss_function: "cross_entropy"
+metrics: ["accuracy", "f1", "auroc"]

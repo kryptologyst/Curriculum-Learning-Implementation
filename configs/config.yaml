@@ -1,0 +1,65 @@
+# @package _global_
+defaults:
+  - _self_
+  - model: simple_cnn
+  - curriculum: basic_difficulty
+  - dataset: cifar10
+  - trainer: standard
+  - experiment: default
+
+# Experiment configuration
+experiment:
+  name: "curriculum_learning_experiment"
+  tags: ["curriculum_learning", "meta_learning", "image_classification"]
+  seed: 42
+  device: "auto"  # auto, cuda, mps, cpu
+  
+# Logging configuration
+logging:
+  level: "INFO"
+  log_dir: "assets/logs"
+  use_tensorboard: true
+  use_wandb: false
+  wandb_project: "curriculum-learning"
+  
+# Training configuration
+training:
+  epochs: 50
+  batch_size: 128
+  learning_rate: 0.001
+  weight_decay: 1e-4
+  scheduler: "cosine"
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+    
+# Evaluation configuration
+evaluation:
+  metrics: ["accuracy", "f1", "auroc", "auprc"]
+  save_predictions: true
+  save_embeddings: false
+  
+# Curriculum learning specific
+curriculum:
+  strategy: "difficulty_based"  # difficulty_based, confidence_based, loss_based
+  num_stages: 3
+  stage_epochs: [10, 20, 20]  # epochs per stage
+  difficulty_schedule: "linear"  # linear, exponential, cosine
+  
+# Data configuration
+data:
+  root_dir: "data"
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  
+# Model configuration
+model:
+  num_classes: 10
+  dropout: 0.2
+  
+# Safety and ethics
+safety:
+  disclaimer: true
+  research_only: true
+  no_production: true

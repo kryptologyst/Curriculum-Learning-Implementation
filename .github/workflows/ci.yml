@@ -1,0 +1,87 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10, 3.11]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install black ruff mypy pytest
+    
+    - name: Lint with ruff
+      run: |
+        ruff check src/ tests/
+    
+    - name: Format check with black
+      run: |
+        black --check src/ tests/
+    
+    - name: Type check with mypy
+      run: |
+        mypy src/ --ignore-missing-imports
+    
+    - name: Test with pytest
+      run: |
+        pytest tests/ -v
+    
+    - name: Run basic smoke test
+      run: |
+        python scripts/run_original.py
+
+  demo-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Test demo imports
+      run: |
+        python -c "import streamlit; print('Streamlit available')"
+        python -c "from demo.streamlit_demo import CurriculumLearningDemo; print('Demo imports successful')"
+    
+    - name: Test basic curriculum learning
+      run: |
+        python -c "
+        from src.data.curriculum import BasicDifficultyCurriculum
+        from src.models.simple_cnn import SimpleCNN
+        import torch
+        
+        # Test basic functionality
+        curriculum = BasicDifficultyCurriculum()
+        model = SimpleCNN()
+        
+        # Test curriculum application
+        batch = (torch.randn(2, 3, 32, 32), torch.randint(0, 10, (2,)))
+        modified_batch = curriculum.apply_curriculum(batch, stage=1)
+        
+        print('Basic curriculum learning test passed!')
+        "

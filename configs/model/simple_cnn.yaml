@@ -1,0 +1,6 @@
+# @package model
+_target_: src.models.simple_cnn.SimpleCNN
+
+num_classes: 10
+dropout: 0.2
+hidden_dim: 128

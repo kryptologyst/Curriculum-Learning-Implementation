@@ -1,0 +1,9 @@
+# @package curriculum
+_target_: src.data.curriculum.BasicDifficultyCurriculum
+
+strategy: "difficulty_based"
+num_stages: 3
+stage_epochs: [10, 20, 20]
+difficulty_schedule: "linear"
+noise_levels: [0.0, 0.1, 0.2]
+occlusion_sizes: [0, 5, 10]

@@ -1,0 +1,10 @@
+# @package dataset
+_target_: src.data.datasets.CIFAR10Dataset
+
+root_dir: "data"
+train_split: 0.8
+val_split: 0.1
+test_split: 0.1
+download: true
+normalize: true
+augmentation: true

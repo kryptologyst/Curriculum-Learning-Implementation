@@ -1,0 +1,6 @@
+# @package experiment
+_target_: src.experiment.Experiment
+
+name: "default_experiment"
+description: "Default curriculum learning experiment"
+tags: ["curriculum_learning", "meta_learning"]
